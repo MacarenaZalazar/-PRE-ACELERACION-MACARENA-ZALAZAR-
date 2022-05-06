@@ -17,10 +17,10 @@ namespace ChallengeAlkemyC.Models
         public string Imagen { get; set; }
 
         public string Historia { get; set; }
-        public string Edad { get; set; }
-        public string Peso { get; set; }
+        public int Edad { get; set; }
+        public int Peso { get; set; }
 
-        public ICollection<Pelicula> Peliculas { get; set; }
+        public List<Pelicula> Peliculas { get; set; }
 
     }
 }

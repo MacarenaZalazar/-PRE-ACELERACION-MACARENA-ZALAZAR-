@@ -9,11 +9,6 @@ namespace ChallengeAlkemyC.Models
     public class DisneyContext : DbContext
     {
 
-        public DisneyContext()
-        {
-
-        }
-
         public DisneyContext(DbContextOptions<DisneyContext> options) : base(options)
         {
             // optionsBuilder.UseSqlServer("Server=DESKTOP-9FQDEKD\\SQLEXPRESS; Database=Disney;Trusted_Connection=True;");

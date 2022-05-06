@@ -16,7 +16,7 @@ namespace ChallengeAlkemyC.Models
         public int Calificacion { get; set; }
 
         //relacion de uno a muchos
-
-        public Personaje Personajes { get; set; }
+        public List<Genero> Generos { get; set; }
+        public List<Personaje> Personajes { get; set; }
     }
 }

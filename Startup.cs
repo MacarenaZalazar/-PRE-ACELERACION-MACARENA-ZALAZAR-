@@ -1,4 +1,6 @@
 ﻿using ChallengeAlkemyC.Models;
+using ChallengeAlkemyC.Repositories;
+using ChallengeAlkemyC.Repositories.Implements;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,20 +31,30 @@ namespace ChallengeAlkemyC
 
             services.AddEntityFrameworkSqlServer();
 
-            services.AddDbContext<DisneyContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("ChallengeAlkemyContext")));
+            services.AddDbContextPool<DisneyContext>((services, options) =>
+            {
+                options.UseInternalServiceProvider(services);
+                options.UseSqlServer(Configuration.GetConnectionString("ChallengeAlkemyContext"));
+            });
 
-            //services.AddDbContext<UserContext>(services, optionsAction =>
+            //services.AddDbContext<DisneyContext>((services, options) =>
             //{
             //    options.UseInternalServiceProvider(services);
-            //    optionsAction.UseSqlServer(Configuracion.GetConnectionString("UserConnectionString"))
+            //    options.UseSqlServer(Configuration.GetConnectionString("ChallengeAlkemyContext"));
             //});
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 { Title = "Api Caduca REST", Version = "v1" });
             });
+         
+            //Repositories
+            services.AddScoped<IPersonajeRepository, PersonajeRepository>();
+            services.AddScoped<IPeliculaRepository, PeliculaRepository>();
+
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

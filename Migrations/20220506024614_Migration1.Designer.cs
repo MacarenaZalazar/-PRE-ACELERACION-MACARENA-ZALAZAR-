@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChallengeAlkemyC.Migrations
 {
     [DbContext(typeof(DisneyContext))]
-    [Migration("20220505233101_Migracion1")]
-    partial class Migracion1
+    [Migration("20220506024614_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,12 +34,7 @@ namespace ChallengeAlkemyC.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PeliculasIPelicula")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PeliculasIPelicula");
 
                     b.ToTable("Generos");
                 });
@@ -60,15 +55,10 @@ namespace ChallengeAlkemyC.Migrations
                     b.Property<string>("Imagen")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PersonajesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IPelicula");
-
-                    b.HasIndex("PersonajesId");
 
                     b.ToTable("Peliculas");
                 });
@@ -80,8 +70,8 @@ namespace ChallengeAlkemyC.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Edad")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Edad")
+                        .HasColumnType("int");
 
                     b.Property<string>("Historia")
                         .HasColumnType("nvarchar(max)");
@@ -94,35 +84,72 @@ namespace ChallengeAlkemyC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Peso")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Peso")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Personajes");
                 });
 
-            modelBuilder.Entity("ChallengeAlkemyC.Models.Genero", b =>
+            modelBuilder.Entity("GeneroPelicula", b =>
                 {
-                    b.HasOne("ChallengeAlkemyC.Models.Pelicula", "Peliculas")
+                    b.Property<int>("GenerosId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeliculasIPelicula")
+                        .HasColumnType("int");
+
+                    b.HasKey("GenerosId", "PeliculasIPelicula");
+
+                    b.HasIndex("PeliculasIPelicula");
+
+                    b.ToTable("GeneroPelicula");
+                });
+
+            modelBuilder.Entity("PeliculaPersonaje", b =>
+                {
+                    b.Property<int>("PeliculasIPelicula")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonajesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PeliculasIPelicula", "PersonajesId");
+
+                    b.HasIndex("PersonajesId");
+
+                    b.ToTable("PeliculaPersonaje");
+                });
+
+            modelBuilder.Entity("GeneroPelicula", b =>
+                {
+                    b.HasOne("ChallengeAlkemyC.Models.Genero", null)
                         .WithMany()
-                        .HasForeignKey("PeliculasIPelicula");
+                        .HasForeignKey("GenerosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Peliculas");
+                    b.HasOne("ChallengeAlkemyC.Models.Pelicula", null)
+                        .WithMany()
+                        .HasForeignKey("PeliculasIPelicula")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("ChallengeAlkemyC.Models.Pelicula", b =>
+            modelBuilder.Entity("PeliculaPersonaje", b =>
                 {
-                    b.HasOne("ChallengeAlkemyC.Models.Personaje", "Personajes")
-                        .WithMany("Peliculas")
-                        .HasForeignKey("PersonajesId");
+                    b.HasOne("ChallengeAlkemyC.Models.Pelicula", null)
+                        .WithMany()
+                        .HasForeignKey("PeliculasIPelicula")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Personajes");
-                });
-
-            modelBuilder.Entity("ChallengeAlkemyC.Models.Personaje", b =>
-                {
-                    b.Navigation("Peliculas");
+                    b.HasOne("ChallengeAlkemyC.Models.Personaje", null)
+                        .WithMany()
+                        .HasForeignKey("PersonajesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

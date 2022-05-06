@@ -15,6 +15,6 @@ namespace ChallengeAlkemyC.Models
         public string Imagen { get; set; }
         //relacion de uno  a muchos
 
-        public Pelicula Peliculas { get; set; }
+        public List<Pelicula> Peliculas { get; set; }
     }
 }
